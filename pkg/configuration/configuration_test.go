@@ -420,3 +420,99 @@ func TestGetVersion(t *testing.T) {
 		assert.Equal(t, newVal, config.GetHTTPKeyPath())
 	})
 }
+
+func TestGetOIDClientID(t *testing.T) {
+	key := configuration.EnvPrefix + "_" + "OID2_CLIENT_ID"
+	resetFunc := testutils.UnsetEnvVarAndRestore(key)
+	defer resetFunc()
+
+	t.Run("default", func(t *testing.T) {
+		resetFunc := testutils.UnsetEnvVarAndRestore(key)
+		defer resetFunc()
+		config := getDefaultConfiguration(t)
+		assert.Equal(t, configuration.DefaultOIDClientID, config.GetOIDClientID())
+	})
+
+	t.Run("file", func(t *testing.T) {
+		resetFunc := testutils.UnsetEnvVarAndRestore(key)
+		defer resetFunc()
+		u, err := uuid.NewV4()
+		require.NoError(t, err)
+		newVal := u.String()
+		config := getFileConfiguration(t, `oid2.client_id: "`+newVal+`"`)
+		assert.Equal(t, newVal, config.GetOIDClientID())
+	})
+
+	t.Run("env overwrite", func(t *testing.T) {
+		u, err := uuid.NewV4()
+		require.NoError(t, err)
+		newVal := u.String()
+		os.Setenv(key, newVal)
+		config := getDefaultConfiguration(t)
+		assert.Equal(t, newVal, config.GetOIDClientID())
+	})
+}
+
+func TestGetOIDClientSecret(t *testing.T) {
+	key := configuration.EnvPrefix + "_" + "OID2_CLIENT_SECRET"
+	resetFunc := testutils.UnsetEnvVarAndRestore(key)
+	defer resetFunc()
+
+	t.Run("default", func(t *testing.T) {
+		resetFunc := testutils.UnsetEnvVarAndRestore(key)
+		defer resetFunc()
+		config := getDefaultConfiguration(t)
+		assert.Equal(t, configuration.DefaultOIDClientSecret, config.GetOIDClientSecret())
+	})
+
+	t.Run("file", func(t *testing.T) {
+		resetFunc := testutils.UnsetEnvVarAndRestore(key)
+		defer resetFunc()
+		u, err := uuid.NewV4()
+		require.NoError(t, err)
+		newVal := u.String()
+		config := getFileConfiguration(t, `oid2.client_secret: "`+newVal+`"`)
+		assert.Equal(t, newVal, config.GetOIDClientSecret())
+	})
+
+	t.Run("env overwrite", func(t *testing.T) {
+		u, err := uuid.NewV4()
+		require.NoError(t, err)
+		newVal := u.String()
+		os.Setenv(key, newVal)
+		config := getDefaultConfiguration(t)
+		assert.Equal(t, newVal, config.GetOIDClientSecret())
+	})
+}
+
+func TestGetOIDAuthorizationURL(t *testing.T) {
+	key := configuration.EnvPrefix + "_" + "OID2_AUTHORIZATION_URL"
+	resetFunc := testutils.UnsetEnvVarAndRestore(key)
+	defer resetFunc()
+
+	t.Run("default", func(t *testing.T) {
+		resetFunc := testutils.UnsetEnvVarAndRestore(key)
+		defer resetFunc()
+		config := getDefaultConfiguration(t)
+		assert.Equal(t, configuration.DefaultOIDAuthorizationURL, config.GetOIDAuthorizationURL())
+	})
+
+	t.Run("file", func(t *testing.T) {
+		resetFunc := testutils.UnsetEnvVarAndRestore(key)
+		defer resetFunc()
+		u, err := uuid.NewV4()
+		require.NoError(t, err)
+		newVal := u.String()
+		config := getFileConfiguration(t, `oid2.authorization_url: "`+newVal+`"`)
+		assert.Equal(t, newVal, config.GetOIDAuthorizationURL())
+	})
+
+	t.Run("env overwrite", func(t *testing.T) {
+		u, err := uuid.NewV4()
+		require.NoError(t, err)
+		newVal := u.String()
+		os.Setenv(key, newVal)
+		config := getDefaultConfiguration(t)
+		assert.Equal(t, newVal, config.GetOIDAuthorizationURL())
+	})
+}

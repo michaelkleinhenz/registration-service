@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 
 	"github.com/codeready-toolchain/registration-service/pkg/health"
+	"github.com/codeready-toolchain/registration-service/pkg/oauth2"
 	"github.com/codeready-toolchain/registration-service/pkg/static"
 )
 
@@ -53,11 +54,27 @@ func (srv *RegistrationServer) SetupRoutes() error {
 		// please leave it as is.
 		healthService := health.New(srv.logger, srv.Config())
 
+		// heath service
 		srv.router.HandleFunc("/api/health", healthService.HealthCheckHandler).
 			Name("health").
 			Methods("GET")
 
+		// callback service for oid2 flows
+		srv.router.HandleFunc("/api/callback", healthService.HealthCheckHandler).
+			Name("callback").
+			Methods("GET")
+
 		// ADD YOUR OWN ROUTES HERE
+
+		// create the route for the oauth redirect
+		oauth2 := oauth2.Redirector {
+			ClientID:            srv.Config().GetOIDClientID(),
+			ClientSecret:        srv.Config().GetOIDClientSecret(),
+			OIDAuthorizationURL: srv.Config().GetOIDAuthorizationURL(),
+			// TODO: this needs to be the registration app address!
+			CallbackURL: "https://this.server.address/api/callback",
+		}
+		srv.router.PathPrefix("/redirect").Handler(oauth2)
 
 		// create the route for static content, served from /
 		spa := spaHandler{Assets: static.Assets}

@@ -10,3 +10,6 @@ http.compress: false
 http.idle_timeout: "15s"
 http.write_timeout: "15s"
 http.read_timeout: "15s"
+oid2.client_id: "oid_id"
+oid2.client_secret: "oid_secret"
+oid2.authorization_url: http://oid2-auth-server/

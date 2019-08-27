@@ -1,7 +1,6 @@
-package health
+package oauth2
 
 import (
-	"encoding/json"
 	"log"
 	"net/http"
 
@@ -22,19 +21,9 @@ func New(logger *log.Logger, config *configuration.Registry) *Service {
 	return r
 }
 
-// getHealthInfo returns the health info.
-func (srv *Service) getHealthInfo() map[string]interface{} {
-	m := make(map[string]interface{})
-	// TODO: this need to get actual health info.
-	m["alive"] = !srv.config.IsTestingMode()
-	m["testingmode"] = srv.config.IsTestingMode()
-	m["version"] = srv.config.GetVersion()
-	return m
-}
-
-// HealthCheckHandler returns a default heath check result.
-func (srv *Service) HealthCheckHandler(w http.ResponseWriter, r *http.Request) {
-	// default handler for system health
+// OAuth2Handler handles OAuth2 redirect responses.
+func (srv *Service) OAuth2Handler(w http.ResponseWriter, r *http.Request) {
+	/*
 	w.Header().Set("Content-Type", "application/json")
 	healthInfo := srv.getHealthInfo()
 	if healthInfo["alive"].(bool) {
@@ -44,7 +33,10 @@ func (srv *Service) HealthCheckHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	err := json.NewEncoder(w).Encode(healthInfo)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		http.Error(w, err.Error(), 500)
 		return
 	}
+	*/
+	http.Error(w, "not implemented yet", http.StatusInternalServerError)
+	return
 }

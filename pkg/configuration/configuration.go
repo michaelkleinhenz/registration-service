@@ -73,6 +73,18 @@ const (
 	varVersion = VersionKey
 	// DefaultVersion specifies default version
 	DefaultVersion = "0.0.0-noversion"
+
+	varOIDClientID = "oid2.client_id"
+	// DefaultOIDClientID specifies default OID ID
+	DefaultOIDClientID = "oid_id"
+
+	varOIDClientSecret = "oid2.client_secret"
+	// DefaultOIDClientSecret specifies default OID Secret
+	DefaultOIDClientSecret = "oid_secret"
+
+	varOIDAuthorizationURL = "oid2.authorization_url"
+	// DefaultOIDAuthorizationURL specifies default OID auth service URL
+	DefaultOIDAuthorizationURL = "http://oid2-auth-server/"
 )
 
 // Registry encapsulates the Viper configuration registry which stores the
@@ -131,6 +143,9 @@ func (c *Registry) setConfigDefaults() {
 	c.v.SetDefault(varHTTPKeyPath, DefaultHTTPKeyPath)
 	c.v.SetDefault(varTestingMode, DefaultTestingMode)
 	c.v.SetDefault(varVersion, DefaultVersion)
+	c.v.SetDefault(varOIDClientID, DefaultOIDClientID)
+	c.v.SetDefault(varOIDClientSecret, DefaultOIDClientSecret)
+	c.v.SetDefault(varOIDAuthorizationURL, DefaultOIDAuthorizationURL)
 }
 
 // GetHTTPAddress returns the HTTP address (as set via default, config file, or
@@ -202,7 +217,25 @@ func (c *Registry) IsTestingMode() bool {
 	return c.v.GetBool(varTestingMode)
 }
 
-// GetVersion returns if the service version (set internally)
+// GetVersion returns the service version (set internally)
 func (c *Registry) GetVersion() string {
 	return c.v.GetString(varVersion)
+}
+
+// GetOIDClientID returns the OID client ID (as set via 
+// config file or environment variable)
+func (c *Registry) GetOIDClientID() string {
+	return c.v.GetString(varOIDClientID)
+}
+
+// GetOIDClientSecret returns the OID client Secret (as set via 
+// config file or environment variable)
+func (c *Registry) GetOIDClientSecret() string {
+	return c.v.GetString(varOIDClientSecret)
+}
+
+// GetOIDAuthorizationURL returns the OID auth service URL (as set via 
+// config file or environment variable)
+func (c *Registry) GetOIDAuthorizationURL() string {
+	return c.v.GetString(varOIDAuthorizationURL)
 }
