@@ -1,3 +1,24 @@
+<head>
+  <script src="http://localhost:8080/auth/js/keycloak.js"></script>
+  <script>
+      var keycloak = Keycloak('/static/keycloak.json');
+      keycloak.init().success(function(authenticated) {
+          alert(authenticated ? 'authenticated' : 'not authenticated');
+          console.log(authenticated ? 'authenticated' : 'not authenticated');
+          if (authenticated) {
+            keycloak.loadUserInfo().success(function(data){
+              console.log("USERID: " + data.sub);
+              console.log("USERNAME: " + data.preferred_username);
+            });
+          }
+        }).error(function() {
+          alert('failed to initialize');
+      });
+  </script>
+</head>
 <body>
-  <h1>Hello World</h1>
+  <h1>Login!</h1>
+  <button onclick="keycloak.login()">Login</button>
+  <button onclick="keycloak.register()">Register</button>
 </body>
+

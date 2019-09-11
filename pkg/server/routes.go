@@ -1,10 +1,12 @@
 package registrationserver
 
 import (
-	"github.com/gin-gonic/gin"
+	"fmt"
 	"log"
 	"net/http"
 	"path/filepath"
+
+	"github.com/gin-gonic/gin"
 
 	"github.com/codeready-toolchain/registration-service/pkg/health"
 	//"github.com/codeready-toolchain/registration-service/pkg/signup"
@@ -24,6 +26,7 @@ type SpaHandler struct {
 // file located at the index path on the SPA handler will be served. This
 // is suitable behavior for serving an SPA (single page application).
 func (h SpaHandler) ServeHTTP(ctx *gin.Context) {
+	fmt.Println("################################################")
 	// get the absolute path to prevent directory traversal
 	path, err := filepath.Abs(ctx.Request.URL.Path)
 	if err != nil {
@@ -31,9 +34,12 @@ func (h SpaHandler) ServeHTTP(ctx *gin.Context) {
 		http.Error(ctx.Writer, err.Error(), http.StatusBadRequest)
 		return
 	}
+	fmt.Printf("################################################ %s\n", path)
 
 	// check if the file exists in the assets
 	_, err = h.Assets.Open(path)
+	fmt.Println(err)
+
 	if err != nil {
 		// file does not exist, redirect to index
 		log.Printf("File %s does not exist.", path)
@@ -69,7 +75,10 @@ func (srv *RegistrationServer) SetupRoutes() error {
 		// create the route for static content, served from /
 		spa := SpaHandler{Assets: static.Assets}
 
+		// we need something like GET("/**")
 		srv.router.GET("/", spa.ServeHTTP)
+		srv.router.GET("/static/:path", spa.ServeHTTP)
+		//srv.router.GET("/keycloak.json", spa.ServeHTTP)
 	})
 	return err
 }

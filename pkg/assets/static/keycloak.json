@@ -1,0 +1,8 @@
+{
+  "realm": "demoRealm",
+  "auth-server-url": "http://localhost:8080/auth",
+  "ssl-required": "none",
+  "resource": "registrationService",
+  "public-client": true,
+  "confidential-port": 0
+}
